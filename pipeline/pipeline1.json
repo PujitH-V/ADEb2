@@ -1,0 +1,47 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"description": "A pipeline to demonstrate the basics of azure data factory.",
+		"activities": [
+			{
+				"name": "Wait60",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 60
+				}
+			},
+			{
+				"name": "SQL_Copy",
+				"description": "Just a simple SQL Copy",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Wait60",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 2,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false
+				}
+			}
+		],
+		"annotations": []
+	}
+}
